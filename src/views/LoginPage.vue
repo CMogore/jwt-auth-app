@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>LOGIN</h1>
-      <form @submit="login">
+      <form @submit.prevent="login">
         <input v-model="username" placeholder="username" />
         <br />
         <br />
@@ -22,11 +22,25 @@
         password: "",
       };
     },
+  //   methods: {
+  //   login() {
+  //     fetch("http://localhost:3002/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         username: this.username,
+  //         password: this.password,
+  //       }),
+  //     });
+  //   },
+  // },
     methods: {
       ...mapMutations(["setUser", "setToken"]),
       async login(e) {
         e.preventDefault();
-        const response = await fetch("http://localhost:3000/login", {
+        const response = await fetch("http://localhost:3002/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +53,8 @@
         const { user, token } = await response.json();
         this.setUser(user);
         this.setToken(token);
-        this.$router.push("/");
+        localStorage.setItem('token', token);
+        this.$router.push("/homepage");
       },
     },
   };
